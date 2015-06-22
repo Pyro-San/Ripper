@@ -1,0 +1,86 @@
+﻿@model Ripper.Models.Cuts
+@{
+    ViewBag.Title = "Calculator";
+}
+<style>
+    select {
+        width: 174px;
+    }
+    .multi {
+        width: 24px;
+    }
+</style>
+
+
+@using (Html.BeginForm("Cuts", "Home"))
+{
+    <div class="container">
+        <h2>Cuts</h2>
+        <div class="row">
+            <div class="col-md-3">Boards:</div>
+            <div class="col-md-9">
+                <input id="Board" type="text" /> x <input id="bmult" type="text" value="1" class="multi" />
+                <input id="AddBoard" type="button" value="Add" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ListBox("Boards", new List<SelectListItem>())
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">Lengths:</div>
+            <div class="col-md-9">
+                <input id="leng" type="text" /> x <input id="lmult" type="text" value="1" class="multi" />
+                <input id="AddLeng" type="button" value="Add" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ListBox("Lengs", new List<SelectListItem>())
+            </div>
+        </div>
+        @Html.Hidden("test", "blah")
+        <input id="sub" type="submit" />
+    </div>
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#AddBoard').on('click', function () {
+                console.log($('#Boards'));
+                var multi = $('#bmult').val();
+                if (multi > 0) {
+                    for (var i = 0; i < multi; i++) {
+                        $('#Boards').append("<option value='" + $('#Board').val() + "'>" + $('#Board').val() + "</option>");
+                    }
+                }
+                
+                $('#Board').val('');
+                $('#bmult').val(1);
+                return false;
+            });
+            $('#AddLeng').on('click', function () {
+                console.log($('#Lengs'));
+                var multi = $('#lmult').val();
+                if (multi > 0) {
+                    for (var i = 0; i < multi; i++) {
+                        $('#Lengs').append("<option value='" + $('#leng').val() + "'>" + $('#leng').val() + "</option>");
+                    }
+                }
+
+                $('#leng').val('');
+                $('#lmult').val(1);
+                return false;
+            });
+            $('#sub').on('click', function () {
+                $('#Boards option').attr('selected', 'selected');
+                $('#Lengs option').attr('selected', 'selected');
+                console.log($("#Lengs"));
+            });
+
+        });
+    </script>
+}
+
