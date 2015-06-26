@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace Ripper.Models
 {
@@ -55,5 +56,7 @@ namespace Ripper.Models
         {
             return _cuts;
         }
+
+
     }
 }

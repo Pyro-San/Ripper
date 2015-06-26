@@ -9,39 +9,74 @@
     .multi {
         width: 24px;
     }
+    .bg-info {
+        padding: 15px;
+    }
 </style>
 
 
 @using (Html.BeginForm("Cuts", "Home"))
 {
     <div class="container">
-        <h2>Cuts</h2>
         <div class="row">
-            <div class="col-md-3">Boards:</div>
-            <div class="col-md-9">
-                <input id="Board" type="text" /> x <input id="bmult" type="text" value="1" class="multi" />
-                <input id="AddBoard" type="button" value="Add" />
+            <div class="col-md-12">
+                <h2>Cuts</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="bg-info">All measurements are in <abbr title="millimeters">mm</abbr> unless otherwise specified.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Available Stock:</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.DropDownListFor(x => x.StdBoards, Model.StdBoards)
+                <input id="Board" type="text" hidden="hidden" /> x <input id="bmult" type="text" value="1" class="multi" />
+                <input class="btn btn-default" id="AddBoard" type="button" value="Add" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 @Html.ListBox("Boards", new List<SelectListItem>())
+                <input class="btn btn-default" id="RemBoard" type="button" value="Remove" />
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">Lengths:</div>
-            <div class="col-md-9">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Lengths Required:</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
                 <input id="leng" type="text" /> x <input id="lmult" type="text" value="1" class="multi" />
-                <input id="AddLeng" type="button" value="Add" />
+                <input class="btn btn-default" id="AddLeng" type="button" value="Add" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 @Html.ListBox("Lengs", new List<SelectListItem>())
+                <input class="btn btn-default" id="RemLeng" type="button" value="Remove" />
             </div>
         </div>
-        @Html.Hidden("test", "blah")
-        <input id="sub" type="submit" />
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input class="btn btn-default" id="sub" type="submit" value="Calculate" />
+            </div>
+        </div>
     </div>
 }
 @section scripts
@@ -50,10 +85,11 @@
         $(document).ready(function () {
             $('#AddBoard').on('click', function () {
                 console.log($('#Boards'));
+                console.log($('#StdBoards').val());
                 var multi = $('#bmult').val();
                 if (multi > 0) {
                     for (var i = 0; i < multi; i++) {
-                        $('#Boards').append("<option value='" + $('#Board').val() + "'>" + $('#Board').val() + "</option>");
+                        $('#Boards').append("<option value='" + $('#StdBoards').val() + "'>" + $('#StdBoards').val() + "</option>");
                     }
                 }
                 

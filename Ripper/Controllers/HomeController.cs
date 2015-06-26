@@ -10,7 +10,8 @@ namespace Ripper.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            return View();
+            var cut = new Cuts();
+            return View(cut);
         }
 
         //
