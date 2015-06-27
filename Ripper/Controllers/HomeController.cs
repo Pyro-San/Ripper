@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ripper.Models;
 
 namespace Ripper.Controllers
@@ -10,18 +9,33 @@ namespace Ripper.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
+            HtmlHelper.ClientValidationEnabled = true;
+            HtmlHelper.UnobtrusiveJavaScriptEnabled = true; 
+
             var cut = new Cuts();
             return View(cut);
         }
 
         //
-        // GET: /Cuts/
-
-        public ActionResult Cuts(List<string> Boards, List<string> Lengs)
+        // POST: /Home/
+        [HttpPost]
+        public ActionResult Index(Cuts cuts)
         {
-            var bc = new BoardCutter(Boards, Lengs);
-            return View(bc);
+            if (!ModelState.IsValid) return View(cuts);
+            TempData["Cuts"] = cuts;
+            return RedirectToAction("Cuts");
         }
 
+        //
+        // GET: /Cuts/
+        public ActionResult Cuts()
+        {
+            var cuts = TempData["Cuts"] as Cuts;
+            if (cuts == null || cuts.BoardList == null || cuts.LengthList == null)
+                return RedirectToAction("Cuts");
+
+            var bc = new BoardCutter(cuts.BoardList, cuts.LengthList);
+            return View(bc);
+        }
     }
 }

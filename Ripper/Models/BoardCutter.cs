@@ -59,7 +59,7 @@ namespace Ripper.Models
             }
         }
 
-        public BoardCutter(IEnumerable<string> boards, IEnumerable<string> lengs)
+        public BoardCutter(IEnumerable<int> boards, IEnumerable<int> lengs)
         {
             _cutWidth = 2;
             _boards = new List<Board>();

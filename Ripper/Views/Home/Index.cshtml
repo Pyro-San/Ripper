@@ -6,16 +6,18 @@
     select {
         width: 174px;
     }
+
     .multi {
-        width: 24px;
+        /*width: 24px;*/
     }
+
     .bg-info {
         padding: 15px;
     }
 </style>
 
 
-@using (Html.BeginForm("Cuts", "Home"))
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "CutForm" }))
 {
     <div class="container">
         <div class="row">
@@ -26,6 +28,7 @@
         <div class="row">
             <div class="col-md-12">
                 <p class="bg-info">All measurements are in <abbr title="millimeters">mm</abbr> unless otherwise specified.</p>
+                @Html.ValidationSummary(false, "There's been an error submitting this form. Please check the following and try again:")
             </div>
         </div>
         <div class="row">
@@ -33,17 +36,30 @@
                 <h3>Available Stock:</h3>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-md-12">
-                @Html.DropDownListFor(x => x.StdBoards, Model.StdBoards)
-                <input id="Board" type="text" hidden="hidden" /> x <input id="bmult" type="text" value="1" class="multi" />
-                <input class="btn btn-default" id="AddBoard" type="button" value="Add" />
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    @Html.DropDownListFor(x => x.StdBoards, Model.StdBoards, new { @class = "form-control" })
+                </div>
+                <div class="col-md-4 form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">X</div>
+                        <input type="number" class="form-control" id="bmult" placeholder="1">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-default" id="AddBoard" type="button" value="Add" />
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                @Html.ListBox("Boards", new List<SelectListItem>())
-                <input class="btn btn-default" id="RemBoard" type="button" value="Remove" />
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    @Html.ListBoxFor(m => m.BoardList, new List<SelectListItem>(), new { @class = "form-control" })
+                </div>
+                <div class="col-md-4">
+                    <input class="btn btn-default" id="RemBoard" type="button" value="Remove" />
+                    @Html.ValidationMessageFor(m => m.BoardList)
+                </div>
             </div>
         </div>
         <div class="row">
@@ -57,24 +73,38 @@
         </div>
 
         <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    <input id="leng" type="text" class=" form-control" />
+                </div>
+                <div class="col-md-4 form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">X</div>
+                        <input type="number" class="form-control" id="lmult" placeholder="1">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-default" id="AddLeng" type="button" value="Add" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    @Html.ListBoxFor(m => m.LengthList, new List<SelectListItem>(), new { @class = "form-control" })
+                </div>
+                <div class="col-md-4">
+                    <input class="btn btn-default" id="RemLeng" type="button" value="Remove" />
+                    @Html.ValidationMessageFor(m => m.LengthList)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-12">
-                <input id="leng" type="text" /> x <input id="lmult" type="text" value="1" class="multi" />
-                <input class="btn btn-default" id="AddLeng" type="button" value="Add" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                @Html.ListBox("Lengs", new List<SelectListItem>())
-                <input class="btn btn-default" id="RemLeng" type="button" value="Remove" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input class="btn btn-default" id="sub" type="submit" value="Calculate" />
+                <input class="btn btn-primary" id="sub" type="submit" value="Calculate" />
             </div>
         </div>
     </div>
@@ -84,25 +114,24 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#AddBoard').on('click', function () {
-                console.log($('#Boards'));
+                console.log($('#BoardList'));
                 console.log($('#StdBoards').val());
                 var multi = $('#bmult').val();
                 if (multi > 0) {
                     for (var i = 0; i < multi; i++) {
-                        $('#Boards').append("<option value='" + $('#StdBoards').val() + "'>" + $('#StdBoards').val() + "</option>");
+                        $('#BoardList').append("<option value='" + $('#StdBoards').val() + "'>" + $('#StdBoards').val() + "</option>");
                     }
                 }
-                
-                $('#Board').val('');
+
                 $('#bmult').val(1);
                 return false;
             });
             $('#AddLeng').on('click', function () {
-                console.log($('#Lengs'));
+                console.log($('#LengthList'));
                 var multi = $('#lmult').val();
                 if (multi > 0) {
                     for (var i = 0; i < multi; i++) {
-                        $('#Lengs').append("<option value='" + $('#leng').val() + "'>" + $('#leng').val() + "</option>");
+                        $('#LengthList').append("<option value='" + $('#leng').val() + "'>" + $('#leng').val() + "</option>");
                     }
                 }
 
@@ -110,10 +139,12 @@
                 $('#lmult').val(1);
                 return false;
             });
-            $('#sub').on('click', function () {
-                $('#Boards option').attr('selected', 'selected');
-                $('#Lengs option').attr('selected', 'selected');
-                console.log($("#Lengs"));
+
+
+            $('#CutForm').on('click', function () {
+                $('#BoardList option').attr('selected', 'selected');
+                $('#LengthList option').attr('selected', 'selected');
+                $('form').validate();
             });
 
         });

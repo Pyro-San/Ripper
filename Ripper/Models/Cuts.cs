@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace Ripper.Models
 {
     public class Cuts
     {
-        public List<int> BoardList;
-        public List<int> LengthList;
+        [Required(ErrorMessage = "At least one Available Stock is required")]
+        public List<int> BoardList  { get; set; }
+
+        [Required(ErrorMessage = "At least one Lenght is required")]
+        public List<int> LengthList { get; set; }
 
         public List<SelectListItem> StdBoards = new List<SelectListItem>
         {
