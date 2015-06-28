@@ -1,6 +1,6 @@
 ﻿@model Ripper.Models.Cuts
 @{
-    ViewBag.Title = "Calculator";
+    ViewBag.Title = "Ripper Calculator";
 }
 <style>
     select {
@@ -22,7 +22,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2>Cuts</h2>
+                <h2>Ripper Calculator</h2>
             </div>
         </div>
         <div class="row">
@@ -39,13 +39,12 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="col-md-6">
-                    @Html.DropDownListFor(x => x.StdBoards, Model.StdBoards, new { @class = "form-control" })
-                </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-10">
                     <div class="input-group">
+                        @Html.DropDownListFor(x => x.StdBoards, Model.StdBoards, new { @class = "form-control", style="width:225px;" })
+                        <input type="hidden" class="form-control" id="StdOther"/>
                         <div class="input-group-addon">X</div>
-                        <input type="number" class="form-control" id="bmult" placeholder="1">
+                        <input type="number" class="form-control" id="bmult" placeholder="1" value="1">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -74,11 +73,9 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="col-md-6">
-                    <input id="leng" type="text" class=" form-control" />
-                </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-10 form-group">
                     <div class="input-group">
+                        <input id="leng" type="text" class="form-control" style="width:225px;"/>
                         <div class="input-group-addon">X</div>
                         <input type="number" class="form-control" id="lmult" placeholder="1">
                     </div>
@@ -104,50 +101,13 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input class="btn btn-primary" id="sub" type="submit" value="Calculate" />
+                <input class="btn btn-primary" id="sub" type="button" value="Calculate" />
             </div>
         </div>
     </div>
 }
 @section scripts
 {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#AddBoard').on('click', function () {
-                console.log($('#BoardList'));
-                console.log($('#StdBoards').val());
-                var multi = $('#bmult').val();
-                if (multi > 0) {
-                    for (var i = 0; i < multi; i++) {
-                        $('#BoardList').append("<option value='" + $('#StdBoards').val() + "'>" + $('#StdBoards').val() + "</option>");
-                    }
-                }
-
-                $('#bmult').val(1);
-                return false;
-            });
-            $('#AddLeng').on('click', function () {
-                console.log($('#LengthList'));
-                var multi = $('#lmult').val();
-                if (multi > 0) {
-                    for (var i = 0; i < multi; i++) {
-                        $('#LengthList').append("<option value='" + $('#leng').val() + "'>" + $('#leng').val() + "</option>");
-                    }
-                }
-
-                $('#leng').val('');
-                $('#lmult').val(1);
-                return false;
-            });
-
-
-            $('#CutForm').on('click', function () {
-                $('#BoardList option').attr('selected', 'selected');
-                $('#LengthList option').attr('selected', 'selected');
-                $('form').validate();
-            });
-
-        });
-    </script>
+    <script src="~/Scripts/jquery.home.js"></script>
 }
 

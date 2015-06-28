@@ -19,6 +19,7 @@ namespace Ripper.Models
             new SelectListItem {Text = "3.2m", Value = "3200"},
             new SelectListItem {Text = "5.7m", Value = "5700"},
             new SelectListItem {Text = "6m", Value = "6000"},
+            new SelectListItem {Text = "Other", Value = ""},
         };
 
 

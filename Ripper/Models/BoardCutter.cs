@@ -11,53 +11,53 @@ namespace Ripper.Models
         readonly double _cutWidth;
         public List<string> Summary;
 
-        public BoardCutter()
-        {
-            _cutWidth = 2;
+        //public BoardCutter()
+        //{
+        //    _cutWidth = 2;
 
-            _boards = new List<Board>();
-            _lengthsNeeded = new List<Length>();
+        //    _boards = new List<Board>();
+        //    _lengthsNeeded = new List<Length>();
             
-            //CutList = new List<Length>();
+        //    //CutList = new List<Length>();
 
-            //Instructions = new List<string>();
-            Summary = new List<string>();
+        //    //Instructions = new List<string>();
+        //    Summary = new List<string>();
             
-            AddBoard(6000);
-            AddBoard(6000);
-            AddBoard(3600);
-            //AddBoard(6000);
+        //    AddBoard(6000);
+        //    AddBoard(6000);
+        //    AddBoard(3600);
+        //    //AddBoard(6000);
 
-            AddLength(1500);
-            AddLength(1500);
-            AddLength(1300);
-            AddLength(1300);
-            AddLength(950);
-            AddLength(950);
-            AddLength(950);
-            AddLength(950);
-            AddLength(600);
-            AddLength(600);
-            AddLength(600);
-            AddLength(600);
-            AddLength(600);
-            AddLength(600);
+        //    AddLength(1500);
+        //    AddLength(1500);
+        //    AddLength(1300);
+        //    AddLength(1300);
+        //    AddLength(950);
+        //    AddLength(950);
+        //    AddLength(950);
+        //    AddLength(950);
+        //    AddLength(600);
+        //    AddLength(600);
+        //    AddLength(600);
+        //    AddLength(600);
+        //    AddLength(600);
+        //    AddLength(600);
 
-            var totalBoardLength = BoardTotal();
-            var totalLengthNeeded = LengthTotal();
+        //    var totalBoardLength = BoardTotal();
+        //    var totalLengthNeeded = LengthTotal();
 
-            if (totalBoardLength < totalLengthNeeded)
-            {
-                Summary.Add("Insufficent boards available");
-                Summary.Add(string.Format("Available: {0}", totalBoardLength));
-                Summary.Add(string.Format("Required: {0}", totalLengthNeeded));
-            }
-            else
-            {
-                foreach (var l in _lengthsNeeded.Where(l => l != null))
-                    TryCutNew(l);
-            }
-        }
+        //    if (totalBoardLength < totalLengthNeeded)
+        //    {
+        //        Summary.Add("Insufficent boards available");
+        //        Summary.Add(string.Format("Available: {0}", totalBoardLength));
+        //        Summary.Add(string.Format("Required: {0}", totalLengthNeeded));
+        //    }
+        //    else
+        //    {
+        //        foreach (var l in _lengthsNeeded.Where(l => l != null))
+        //            TryCutNew(l);
+        //    }
+        //}
 
         public BoardCutter(IEnumerable<int> boards, IEnumerable<int> lengs)
         {
@@ -86,15 +86,27 @@ namespace Ripper.Models
             }
             else
             {
+                _boards = _boards.OrderByDescending(i => i.GetLength()).ToList();
+                _lengthsNeeded = _lengthsNeeded.OrderByDescending(i => i.GetLength()).ToList();
+
+                // TODO: this requires work
+                // Here is where we need to implement cut optimisation.
+                // for each length, try to find a board to cut from
                 foreach (var l in _lengthsNeeded.Where(l => l != null))
-                    TryCutNew(l);
+                {
+                    foreach (var board in _boards)
+                    {
+                        if (TryCut(l, board)) break;
+                    }
+                }
             }
 
         }
 
         public void AddBoard(double board)
         {
-            _boards.Add(new Board(board));
+            var id = _boards.Count + 1;
+            _boards.Add(new Board(board, id));
         }
 
         public void AddLength(double length)
@@ -102,14 +114,9 @@ namespace Ripper.Models
             _lengthsNeeded.Add(new Length(length, _cutWidth));
         }
 
-        void TryCutNew(Length l)
+        static bool TryCut(Length l, Board b)
         {
-            if (l.GetLength() <= 0) return;
-            foreach (var board in _boards)
-            {
-                if (board.AddCut(l))
-                    return;
-            }
+            return !(l.GetLength() <= 0) && b.AddCut(l);
         }
 
         public List<Board> Boards()

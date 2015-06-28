@@ -1,35 +1,64 @@
 ﻿@model Ripper.Models.BoardCutter
 @{
-    ViewBag.Title = "Rip Cuts";
+    ViewBag.Title = "Ripper Calculator";
 }
 <style>
     .boards {
         width: 100%;
-        height: 24px;
-        border: 1px solid #000000;
+        height: 42px;
+        border: 1px solid #806517;
+        background-color: #DCB579;
     }
+
         .boards div {
             float: left;
-            border: 1px solid #000000;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-right: 1px solid #806517;
             text-align: center;
         }
+
+    .show-grid [class^="col-"] {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #DCB579;
+        border: 1px solid #806517;
+    }
+    .bg-info {
+        padding: 15px;
+    }
 </style>
 <div class="container-fluid">
-    <h2>Calculations:</h2>
+    <h1>Ripper Calculator</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="bg-info">All measurements are in <abbr title="millimeters">mm</abbr> unless otherwise specified.</p>
+            <p class="bg-info">2 <abbr title="millimeters">mm</abbr> added to each cut for blade width.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Stock Available:</h2>
+            <div class="row show-grid">
+                @foreach (var item in Model.Boards())
+                {
+                    <div class="col-md-4">#@item.GetId() (@item.GetLength())</div>
+                }
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>Lengths Needed:</h2>
+            <div class="row show-grid">
+                @foreach (var item in Model.Lengths())
+                {
+                    <div class="col-md-2">@item.GetLength()</div>
+                }
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <dl>
-                <dt>Boards:</dt>
-                @foreach (var item in Model.Boards())
-                {
-                    <dd>@item.GetLength()</dd>
-                }
-                <dt>Lengths Needed:</dt>
-                @foreach (var item in Model.Lengths())
-                {
-                    <dd>@item.GetLength()</dd>
-                }
-                <dt>Summary:</dt>
                 @foreach (var item in Model.Summary)
                 {
                     <dd>@item</dd>
@@ -37,22 +66,27 @@
             </dl>
         </div>
     </div>
+@*</div>
+
+<div class="container-fluid">*@
+    <h2>Calculations:</h2>
+    @foreach (var item in Model.Boards())
+    {
+        <div class="row">
+            <div class="col-md-2"><b>Board #@item.GetId():</b></div>
+            <div class="col-md-2">@item.GetLength()</div>
+            <div class="col-md-2"><b>Remainder:</b></div>
+            <div class="col-md-2">@item.GetRemainder()</div>
+        </div>
+        <div class="boards">
+            @foreach (var cut in item.GetCutList())
+            {
+                <div style="width: @cut.GetPercent()%;">@cut.GetLength()</div>
+            }
+        </div>
+        <br />
+        <br />
+    }
 </div>
-
-
-@foreach (var item in Model.Boards())
-{
-    <p><b>Board:</b> @item.GetLength()</p>
-    <p><b>Remainder:</b> @item.GetRemainder()</p>
-    <div class="boards">
-        @foreach (var cut in item.GetCutList())
-        {
-            <div style="width: @cut.GetPercent()%;">@cut.GetLength()</div>
-        }
-    </div>
-    <br />
-    <br />
-}
-
 
 

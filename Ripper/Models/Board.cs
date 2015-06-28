@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace Ripper.Models
 {
     public class Board
     {
+        private readonly int _id;
         private readonly double _length;
         private double _remaining;
         private readonly List<Length> _cuts;
 
         private readonly int _boardTicks;
 
-        public Board(double length)
+        public Board(double length, int id)
         {
             _length = length;
+            _id = id;
             _remaining = length;
             _cuts = new List<Length>();
 
@@ -57,6 +58,14 @@ namespace Ripper.Models
             return _cuts;
         }
 
+        public int GetId()
+        {
+            return _id;
+        }
 
+        public int CountCuts()
+        {
+            return _cuts.Count;
+        }
     }
 }

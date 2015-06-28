@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Ripper.Models;
 
 namespace Ripper.Controllers
@@ -13,6 +14,8 @@ namespace Ripper.Controllers
             HtmlHelper.UnobtrusiveJavaScriptEnabled = true; 
 
             var cut = new Cuts();
+            if (TempData["Cuts"] != null)
+                cut = TempData["Cuts"] as Cuts;
             return View(cut);
         }
 
@@ -23,19 +26,31 @@ namespace Ripper.Controllers
         {
             if (!ModelState.IsValid) return View(cuts);
             TempData["Cuts"] = cuts;
-            return RedirectToAction("Cuts");
+            return RedirectToAction("Cuts", "Home");
         }
 
         //
         // GET: /Cuts/
         public ActionResult Cuts()
         {
-            var cuts = TempData["Cuts"] as Cuts;
+            var cuts = TempData["Cuts"] as Cuts ?? TestCuts();
+
             if (cuts == null || cuts.BoardList == null || cuts.LengthList == null)
-                return RedirectToAction("Cuts");
+                return RedirectToAction("Index", "Home");
 
             var bc = new BoardCutter(cuts.BoardList, cuts.LengthList);
             return View(bc);
+        }
+
+        private static Cuts TestCuts()
+        {
+            var cut = new Cuts
+            {
+                BoardList = new List<int> { 2720, 2720 },
+                LengthList = new List<int> {800, 800, 700, 700, 700, 700, 500, 500},
+            };
+
+            return cut;
         }
     }
 }
