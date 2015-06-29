@@ -4,19 +4,19 @@ namespace Ripper.Models
 {
     public class Length
     {
-        private readonly double _length;
-        private readonly double _cutWidth;
-        private int _boardPercent;
+        private readonly float _length;
+        private readonly float _cutWidth;
+        private int _stockPercent;
 
-        public Length(double length, double cutWidth)
+        public Length(float length, float cutWidth)
         {
             _length = length;
             _cutWidth = cutWidth;
         }
 
-        public void SetPercent(double p)
+        public void SetPercent(float p)
         {
-            _boardPercent = Convert.ToInt32(Math.Round(p, 0));
+            _stockPercent = Convert.ToInt32(Math.Round(p, 0));
         }
 
         public double GetLength()
@@ -26,7 +26,7 @@ namespace Ripper.Models
 
         public double GetPercent()
         {
-            return _boardPercent;
+            return _stockPercent;
         }
     }
 }

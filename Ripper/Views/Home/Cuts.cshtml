@@ -1,4 +1,4 @@
-﻿@model Ripper.Models.BoardCutter
+﻿@model Ripper.Models.Cutter
 @{
     ViewBag.Title = "Ripper Calculator";
 }
@@ -41,7 +41,7 @@
         <div class="col-md-6">
             <h2>Stock Available:</h2>
             <div class="row show-grid">
-                @foreach (var item in Model.Boards())
+                @foreach (var item in Model.Stock())
                 {
                     <div class="col-md-4">#@item.GetId() (@item.GetLength())</div>
                 }
@@ -67,11 +67,8 @@
             </dl>
         </div>
     </div>
-@*</div>
-
-<div class="container-fluid">*@
     <h2>Calculations:</h2>
-    @foreach (var item in Model.Boards())
+    @foreach (var item in Model.Stock())
     {
         <div class="row">
             <div class="col-md-2"><b>Board #@item.GetId():</b></div>

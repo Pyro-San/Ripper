@@ -10,9 +10,6 @@ namespace Ripper.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            HtmlHelper.ClientValidationEnabled = true;
-            HtmlHelper.UnobtrusiveJavaScriptEnabled = true; 
-
             var cut = new Cuts();
             if (TempData["Cuts"] != null)
                 cut = TempData["Cuts"] as Cuts;
@@ -38,7 +35,7 @@ namespace Ripper.Controllers
             if (cuts == null || cuts.BoardList == null || cuts.LengthList == null)
                 return RedirectToAction("Index", "Home");
 
-            var bc = new BoardCutter(cuts.BoardList, cuts.LengthList);
+            var bc = new Cutter(cuts.BoardList, cuts.LengthList);
             return View(bc);
         }
 
@@ -46,8 +43,8 @@ namespace Ripper.Controllers
         {
             var cut = new Cuts
             {
-                BoardList = new List<int> { 2720, 2720 },
-                LengthList = new List<int> {800, 800, 700, 700, 700, 700, 500, 500},
+                BoardList = new List<float> { 2720, 2720 },
+                LengthList = new List<float> {800, 800, 700, 700, 700, 700, 500, 500},
             };
 
             return cut;

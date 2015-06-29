@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Ripper.Models
 {
-    public class Board
+    public class Stock
     {
         private readonly int _id;
-        private readonly double _length;
-        private double _remaining;
+        private readonly float _length;
+        private float _remaining;
         private readonly List<Length> _cuts;
 
         private readonly int _boardTicks;
 
-        public Board(double length, int id)
+        public Stock(float length, int id)
         {
             _length = length;
             _id = id;
@@ -27,9 +27,9 @@ namespace Ripper.Models
         {
             var cut = l.GetLength();
             if (cut > 0 && cut >= _remaining) return false;
-            l.SetPercent(l.GetLength()/_boardTicks);
+            l.SetPercent((float)l.GetLength() / _boardTicks);
             _cuts.Add(l);
-            _remaining = _remaining - cut;
+            _remaining = (float) (_remaining - cut);
             return true;
         }
 
@@ -43,12 +43,12 @@ namespace Ripper.Models
             return _remaining;
         }
 
-        public int GetBoardTicks()
+        public int GetTicks()
         {
             return _boardTicks;
         }
 
-        public void SetRemaining(double d)
+        public void SetRemaining(float d)
         {
             _remaining = d;
         }

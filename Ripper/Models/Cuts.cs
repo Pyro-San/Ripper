@@ -7,10 +7,10 @@ namespace Ripper.Models
     public class Cuts
     {
         [Required(ErrorMessage = "At least one Available Stock is required")]
-        public List<int> BoardList  { get; set; }
+        public List<float> BoardList { get; set; }
 
         [Required(ErrorMessage = "At least one Lenght is required")]
-        public List<int> LengthList { get; set; }
+        public List<float> LengthList { get; set; }
 
         public List<SelectListItem> StdBoards = new List<SelectListItem>
         {
