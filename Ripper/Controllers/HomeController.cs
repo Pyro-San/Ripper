@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Ripper.Models;
 
@@ -35,7 +36,12 @@ namespace Ripper.Controllers
             if (cuts == null || cuts.BoardList == null || cuts.LengthList == null)
                 return RedirectToAction("Index", "Home");
 
-            var bc = new Cutter(cuts.BoardList, cuts.LengthList);
+            var stock = cuts.BoardList.Select(s => new Stock(s, 0)).ToList();
+            var lengths = cuts.LengthList.Select(l => new Length(l)).ToList();
+
+
+            var bc = new Models.Ripper(stock, lengths, lengths.Count);
+            bc.Solve();
             return View(bc);
         }
 

@@ -1,4 +1,4 @@
-﻿@model Ripper.Models.Cutter
+﻿@model Ripper.Models.Ripper
 @{
     ViewBag.Title = "Ripper Calculator";
 }
@@ -37,13 +37,13 @@
             <p class="bg-info">2 <abbr title="millimeters">mm</abbr> added to each cut for blade width.</p>
         </div>
     </div>
-    <div class="row">
+    @*<div class="row">
         <div class="col-md-6">
             <h2>Stock Available:</h2>
             <div class="row show-grid">
                 @foreach (var item in Model.Stock())
                 {
-                    <div class="col-md-4">#@item.GetId() (@item.GetLength())</div>
+                    <div class="col-md-4">#@item.Id (@item.Size)</div>
                 }
             </div>
         </div>
@@ -52,7 +52,7 @@
             <div class="row show-grid">
                 @foreach (var item in Model.Lengths())
                 {
-                    <div class="col-md-2">@item.GetLength()</div>
+                    <div class="col-md-2">@item.Size</div>
                 }
             </div>
         </div>
@@ -71,19 +71,26 @@
     @foreach (var item in Model.Stock())
     {
         <div class="row">
-            <div class="col-md-2"><b>Board #@item.GetId():</b></div>
-            <div class="col-md-2">@item.GetLength()</div>
+            <div class="col-md-2"><b>Board #@item.Id:</b></div>
+            <div class="col-md-2">@item.Size</div>
             <div class="col-md-2"><b>Remainder:</b></div>
-            <div class="col-md-2">@item.GetRemainder()</div>
+            <div class="col-md-2">@item.Remaining</div>
         </div>
         <div class="boards">
             @foreach (var cut in item.GetCutList())
             {
-                <div style="width: @cut.GetPercent()%;">@cut.GetLength()</div>
+                <div style="width: @cut.Percent%;">@cut.Size</div>
             }
         </div>
         <br />
         <br />
+    }*@
+    @foreach (var item in Model.SetOfSolutions)
+    {
+        <div class="row">
+            <div class="col-md-6">@item.Key</div>
+            <div class="col-md-6">@item.Value.</div>
+        </div>
     }
 </div>
 

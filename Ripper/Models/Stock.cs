@@ -3,64 +3,43 @@ using System.Collections.Generic;
 
 namespace Ripper.Models
 {
+    [Serializable]
     public class Stock
     {
-        private readonly int _id;
-        private readonly float _length;
-        private float _remaining;
+        // This class is for the available stock
+        // TODO: Add Cost per piece & piece limit
+
+        public int Id { get; private set; }
+        public float Size { get; set; }
+        public float Cost { get; set; }
+        public float Remaining { get; set; }
+        public int Ticks { get; private set; }
         private readonly List<Length> _cuts;
 
-        private readonly int _boardTicks;
-
-        public Stock(float length, int id)
+        public Stock(float size, int id)
         {
-            _length = length;
-            _id = id;
-            _remaining = length;
+            Size = size;
+            Id = id;
+            Remaining = size;
             _cuts = new List<Length>();
 
-            _boardTicks = Convert.ToInt32(length/100);
+            Ticks = Convert.ToInt32(size/100);
 
         }
 
         public bool AddCut(Length l)
         {
-            var cut = l.GetLength();
-            if (cut > 0 && cut >= _remaining) return false;
-            l.SetPercent((float)l.GetLength() / _boardTicks);
+            var cut = l.Size;
+            if (cut > 0 && cut >= Remaining) return false;
+            l.Percent = (int) (l.Size / Ticks);
             _cuts.Add(l);
-            _remaining = (float) (_remaining - cut);
+            Remaining = Remaining - cut;
             return true;
-        }
-
-        public double GetLength()
-        {
-            return _length;
-        }
-
-        public double GetRemainder()
-        {
-            return _remaining;
-        }
-
-        public int GetTicks()
-        {
-            return _boardTicks;
-        }
-
-        public void SetRemaining(float d)
-        {
-            _remaining = d;
         }
 
         public List<Length> GetCutList()
         {
             return _cuts;
-        }
-
-        public int GetId()
-        {
-            return _id;
         }
 
         public int CountCuts()

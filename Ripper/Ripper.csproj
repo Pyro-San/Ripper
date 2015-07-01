@@ -132,8 +132,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BranchAndBound.cs" />
+    <Compile Include="Models\Rip.cs" />
+    <Compile Include="Models\Sorting.cs" />
     <Compile Include="Models\Stock.cs" />
-    <Compile Include="Models\Cutter.cs" />
+    <Compile Include="Models\Ripper.cs" />
     <Compile Include="Models\Cuts.cs" />
     <Compile Include="Models\Length.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
