@@ -36,13 +36,13 @@ namespace Ripper.Controllers
             if (cuts == null || cuts.BoardList == null || cuts.LengthList == null)
                 return RedirectToAction("Index", "Home");
 
-            var stock = cuts.BoardList.Select(s => new Stock(s, 0)).ToList();
+            var stock = cuts.BoardList.Select(s => new Stock(s, 8.6f, 0)).ToList();
             var lengths = cuts.LengthList.Select(l => new Length(l)).ToList();
 
 
             var bc = new Models.Ripper(stock, lengths, lengths.Count);
             bc.Solve();
-            return View(bc);
+            return View(bc.Solution);
         }
 
         private static Cuts TestCuts()

@@ -8,10 +8,11 @@ namespace Ripper.Models
         public Length(float size)
         {
             Size = size;
+            Pieces = 1;
         }
 
         public float Size { get; set; }
-        public uint Pieces { get; set; }
+        public int Pieces { get; set; }
 
         private int _stockPercent;
         public int Percent

@@ -16,8 +16,9 @@ namespace Ripper.Models
         public int Ticks { get; private set; }
         private readonly List<Length> _cuts;
 
-        public Stock(float size, int id)
+        public Stock(float size, float cost, int id)
         {
+            Cost = cost;
             Size = size;
             Id = id;
             Remaining = size;

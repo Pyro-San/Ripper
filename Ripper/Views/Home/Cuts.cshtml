@@ -1,4 +1,4 @@
-﻿@model Ripper.Models.Ripper
+﻿@model Ripper.Models.RipperSolution
 @{
     ViewBag.Title = "Ripper Calculator";
 }
@@ -25,6 +25,7 @@
         background-color: #DCB579;
         border: 1px solid #806517;
     }
+
     .bg-info {
         padding: 15px;
     }
@@ -37,61 +38,119 @@
             <p class="bg-info">2 <abbr title="millimeters">mm</abbr> added to each cut for blade width.</p>
         </div>
     </div>
-    @*<div class="row">
-        <div class="col-md-6">
-            <h2>Stock Available:</h2>
-            <div class="row show-grid">
-                @foreach (var item in Model.Stock())
-                {
-                    <div class="col-md-4">#@item.Id (@item.Size)</div>
-                }
-            </div>
-        </div>
-        <div class="col-md-6">
-            <h2>Lengths Needed:</h2>
-            <div class="row show-grid">
-                @foreach (var item in Model.Lengths())
-                {
-                    <div class="col-md-2">@item.Size</div>
-                }
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Solution:</h2>
+            <h3>@Model.SolutionType</h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <dl>
-                @foreach (var item in Model.Summary)
-                {
-                    <dd>@item</dd>
-                }
-            </dl>
-        </div>
+        <div class="col-md-3">Best Size:</div>
+        <div class="col-md-3">@Model.AbsoluteBestSize.ToString("#,###.###")</div>
+        <div class="col-md-3">Best Cost:</div>
+        <div class="col-md-3">@Model.BestCost.ToString("#,##0.###")</div>
     </div>
-    <h2>Calculations:</h2>
-    @foreach (var item in Model.Stock())
+    <div class="row">
+        <div class="col-md-3">Sum of Stocks used:</div>
+        <div class="col-md-3">@Model.StockSum.ToString("#,###.###")</div>
+        <div class="col-md-3">Sum of Lengths:</div>
+        <div class="col-md-3">@Model.TotalLengthSum.ToString("#,###.###")</div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">Reject:</div>
+        <div class="col-md-3">@Model.Reject.ToString("#0.0##%")</div>
+        <div class="col-md-3">Cost of this solution:</div>
+        <div class="col-md-3">@Model.Cost.ToString("#,##0.###")</div>
+    </div>
+    @foreach (var stock in Model.Rips)
     {
         <div class="row">
-            <div class="col-md-2"><b>Board #@item.Id:</b></div>
-            <div class="col-md-2">@item.Size</div>
-            <div class="col-md-2"><b>Remainder:</b></div>
-            <div class="col-md-2">@item.Remaining</div>
-        </div>
-        <div class="boards">
-            @foreach (var cut in item.GetCutList())
-            {
-                <div style="width: @cut.Percent%;">@cut.Size</div>
-            }
-        </div>
-        <br />
-        <br />
-    }*@
-    @foreach (var item in Model.SetOfSolutions)
-    {
-        <div class="row">
-            <div class="col-md-6">@item.Key</div>
-            <div class="col-md-6">@item.Value.</div>
+            <div class="col-md-12">Stock: @stock.Stock</div>
+            <div class="row">
+                <div class="col-md-2">Cost:</div>
+                <div class="col-md-2">@stock.Cost</div>
+                <div class="col-md-2">Employ:</div>
+                <div class="col-md-2">@stock.Used</div>
+                <div class="col-md-2">Reject:</div>
+                <div class="col-md-2">@stock.Rejected</div>
+            </div>
+            <div class="row">
+                <ul>
+                    @foreach (var cut in stock.SizesCut)
+                    {
+                        <li>@cut.ToString()</li>
+                    }
+                </ul>
+            </div>
         </div>
     }
+    @*
+        sb.AppendLine("<h1>SOLUTION:  " + kvp.Key + "<\\h2>");
+                sb.AppendLine("Absolute Best Size:  " + absoluteBestSize.ToString("#,###.###") + "\t\tBest Cost:  " +
+                              bestCost.ToString("#,##0.###") + "\nSum of Stocks used:  " + stockSum.ToString("#,###.###") +
+                              " \t\tSum of Items:  " + _totalLengthsSum.ToString("#,###.###") + " \tReject:  " + reject.ToString("#0.0##%")
+                              + "\nCost of this solution:  " + cost.ToString("#,##0.###"));
+                    sb.AppendLine("_______________________________________________________________________________");
+                    sb.AppendLine("Stock  " + bin.Stock + "  \tcost  " + bin.Cost.ToString("#,###.##") + "  \tused  "
+                                  + bin.Employ.ToString("#,###.##") + "  \treject  " + Math.Round(bin.Reject, 1));
+
+                    foreach (var item in bin.LengthsAssigned)
+                    {
+                        sb.Append("\t" + item.Size);
+                    }
+
+
+
+    *@
+
+    @*<div class="row">
+            <div class="col-md-6">
+                <h2>Stock Available:</h2>
+                <div class="row show-grid">
+                    @foreach (var item in Model.Stock())
+                    {
+                        <div class="col-md-4">#@item.Id (@item.Size)</div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Lengths Needed:</h2>
+                <div class="row show-grid">
+                    @foreach (var item in Model.Lengths())
+                    {
+                        <div class="col-md-2">@item.Size</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <dl>
+                    @foreach (var item in Model.Summary)
+                    {
+                        <dd>@item</dd>
+                    }
+                </dl>
+            </div>
+        </div>
+        <h2>Calculations:</h2>
+        @foreach (var item in Model.Stock())
+        {
+            <div class="row">
+                <div class="col-md-2"><b>Board #@item.Id:</b></div>
+                <div class="col-md-2">@item.Size</div>
+                <div class="col-md-2"><b>Remainder:</b></div>
+                <div class="col-md-2">@item.Remaining</div>
+            </div>
+            <div class="boards">
+                @foreach (var cut in item.GetCutList())
+                {
+                    <div style="width: @cut.Percent%;">@cut.Size</div>
+                }
+            </div>
+            <br />
+            <br />
+        }*@
 </div>
 
 
